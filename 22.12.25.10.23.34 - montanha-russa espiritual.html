@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Montanha-Russa Espiritual</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- MANTIDO EXATAMENTE COMO NO SEU MODELO ORIGINAL --- */
+        :root {
+            --bg-color: #fdfdfd;
+            --text-main: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --accent-color: #000000;
+            --sidebar-text: #888888;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Crimson Pro', serif;
+            --sidebar-width: 280px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.7;
+            font-size: 19px;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        /* --- BOTÃO HAMBÚRGUER --- */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 1000;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .hamburger-icon {
+            width: 24px;
+            height: 2px;
+            background-color: var(--accent-color);
+            display: block;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-icon::before,
+        .hamburger-icon::after {
+            content: '';
+            width: 24px;
+            height: 2px;
+            background-color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-icon::before { top: -8px; }
+        .hamburger-icon::after { top: 8px; }
+
+        .menu-open .hamburger-icon { background-color: transparent; }
+        .menu-open .hamburger-icon::before { top: 0; transform: rotate(45deg); }
+        .menu-open .hamburger-icon::after { top: 0; transform: rotate(-45deg); }
+
+
+        /* --- LAYOUT GRID --- */
+        .layout-container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        aside {
+            padding: 4rem 2rem;
+            border-right: 1px solid rgba(0,0,0,0.05);
+            background-color: var(--bg-color);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .brand {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-variant-caps: small-caps;
+            margin-bottom: 3rem;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            display: block;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        nav ul { list-style: none; }
+        nav li { margin-bottom: 1rem; }
+
+        nav a {
+            text-decoration: none;
+            color: var(--sidebar-text);
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            display: block;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-color);
+            transform: translateX(5px);
+        }
+        
+        nav a.active {
+            border-left: 1px solid var(--accent-color);
+            padding-left: 10px;
+            margin-left: -11px;
+        }
+
+        /* --- CONTEÚDO --- */
+        main { padding: 4rem 4rem 4rem 6rem; }
+
+        article {
+            max-width: 680px;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+            position: relative; 
+            overflow: visible;
+        }
+
+        header { margin-bottom: 5rem; text-align: center; }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        header::after {
+            content: ""; display: block; width: 60px; height: 1px;
+            background-color: var(--text-main); margin: 0 auto; opacity: 0.3;
+        }
+
+        .destaque-img {
+            display: block; max-width: 100%; height: auto;
+            margin: 1.5rem auto; border-radius: 2px; opacity: 0.95;
+        }
+
+        p { margin-bottom: 1.5rem; color: var(--text-secondary); text-align: left; }
+        
+        p:first-of-type::first-letter {
+            float: left; font-family: var(--font-display); font-size: 4.8rem;
+            line-height: 0.75; padding-right: 12px; padding-top: 4px; color: var(--accent-color);
+        }
+
+        em { color: var(--text-main); font-style: italic; }
+        .ref { font-size: 0.9em; opacity: 0.8; font-variant-numeric: oldstyle-nums; }
+        strong { color: var(--text-main); font-weight: 600; } /* Adicionado para negritos do texto */
+        
+        footer {
+            margin-top: 5rem; text-align: center; font-size: 0.85rem;
+            color: #ccc; font-family: var(--font-display); font-style: italic;
+            border-top: 1px solid rgba(0,0,0,0.05); padding-top: 2rem;
+        }
+
+        /* --- ESTILO DO DESTAQUE (PULL QUOTE) --- */
+        .quote-destaque {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            line-height: 1.3;
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            border: 15px solid var(--accent-color);
+            padding: 1rem;
+            margin: 3rem 0;
+            text-align: center;
+            position: relative;
+            display: block;
+            box-sizing: border-box;
+            line-height: 1.3 !important;
+        }
+
+        .quote-destaque p { margin: 0; padding: 0; }
+
+        aside.quote-destaque {
+            background-color: var(--bg-color);
+            height: auto;
+            top: auto;
+            z-index: auto;
+            padding: 1rem;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* --- RESPONSIVIDADE DESTAQUE --- */
+        @media (max-width: 1249px) {
+            .quote-destaque {
+                position: relative !important;
+                right: auto !important;
+                width: auto !important;
+                top: auto !important;
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 95%;
+                padding: 1.2rem !important;
+            }
+        }
+
+        @media (min-width: 1250px) {
+            .quote-destaque {
+                position: absolute;
+                right: -300px;
+                width: 240px;
+                margin: 0;
+                top: 40%; /* Ajustado para este texto específico */
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- MÁSCARA ESCURA (Overlay) --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255, 0.8);
+            backdrop-filter: blur(2px);
+            z-index: 800;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease;
+        }
+
+        .menu-open .overlay { opacity: 1; visibility: visible; }
+
+        /* --- RESPONSIVIDADE (MOBILE) --- */
+        @media (max-width: 900px) {
+            .menu-toggle { display: block; }
+
+            .layout-container { display: block; }
+
+            aside {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                transform: translateX(-100%);
+                box-shadow: 5px 0 15px rgba(0,0,0,0.05);
+            }
+
+            .menu-open aside { transform: translateX(0); }
+
+            main { padding: 5rem 1.5rem 2rem 1.5rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Botão Hambúrguer -->
+    <button class="menu-toggle" aria-label="Abrir Menu">
+        <span class="hamburger-icon"></span>
+    </button>
+
+    <!-- Overlay -->
+    <div class="overlay"></div>
+
+    <div class="layout-container">
+        
+        <!-- SIDEBAR -->
+        <aside>
+            <a href="21.12.25.10.27.01 - index - o levo fardo do peso da gloria.html" class="brand">O leve fardo <br /> do peso da <br /> glória ⏹</a>
+            <nav>
+                <ul>
+                    <!-- Atualizei os links. O index perdeu o active, e esta página ganhou -->
+                    <li><a href="21.12.25.10.27.01 - index - o levo fardo do peso da gloria.html">Sombras ao Entardecer</a></li>
+                    <li><a href="22.12.25.10.23.34 - montanha-russa espiritual.html" class="active">A Montanha-Russa Espiritual</a></li>
+                    <li><a href="texto3.html">Sobre a Esperança</a></li>
+                    <li><a href="contato.html">Sobre o Autor</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO -->
+        <main>
+            <article>
+                <header>
+                    <h1>A montanha-russa espiritual</h1>
+                    <!-- IMPORTANTE: Substitua 'imagem-montanha.png' pelo arquivo que você deseja usar -->
+                    <img src="22.12.25.10.31.00 - illustration - spiritual roller coaster.png" alt="Ilustração decorativa" class="destaque-img">
+                </header>
+
+                <p>Há um tipo de instabilidade espiritual muito comum entre nós: somos zelosos quando estamos em apuros, intensos na oração quando a dor aperta, disciplinados quando a necessidade grita — mas, passada a crise, afrouxamos. A fé cresce na escassez e mingua na abundância. A oração se acende na noite e se apaga ao amanhecer. Isso cria uma verdadeira <em>montanha-russa espiritual</em>: picos de fervor seguidos de vales de negligência.</p>
+
+                <p>A Escritura nos chama a outro caminho: <strong>constância</strong>.</p>
+
+                <p>Tiago exorta: <em>“Sede, pois, irmãos, pacientes até a vinda do Senhor… fortalecei o vosso coração”</em> <span class="ref">(Tg 5:7–8)</span>. Note que ele não fala apenas de esperar a intervenção de Deus, mas de <strong>permanecer fortalecidos enquanto se espera</strong>. A disciplina espiritual não é uma barganha com Deus — “se eu orar bastante, Ele age” —, mas um modo de vida que honra a Deus antes, durante e depois da resposta.</p>
+
+                <p>O agricultor, diz Tiago, não controla a chuva, mas prepara a terra todos os dias. Ele não ara o solo apenas quando o céu ameaça chover. Assim também o cristão: <strong>ora não apenas para receber algo, mas porque pertence a Deus</strong>.</p>
+
+                <p>A montanha-russa espiritual nasce quando tratamos a fé como reação, não como fundamento. Paulo combate isso quando escreve: <em>“Portanto, meus amados irmãos, sede firmes, inabaláveis e sempre abundantes na obra do Senhor”</em> <span class="ref">(1Co 15:58)</span>. Não “quando tudo vai mal”, nem “até a bênção chegar”, mas <strong>sempre</strong>.</p>
+
+                <!-- COMEÇA O BLOCO DE DESTAQUE -->
+                <aside class="quote-destaque">O verdadeiro teste da maturidade espiritual não é orar quando falta, mas permanecer fiel quando sobra.</aside>
+                <!-- TERMINA O BLOCO DE DESTAQUE -->
+
+                <p>Outro perigo é imaginar que, uma vez recebida a providência, o risco passou. A Bíblia mostra o contrário. Israel clamou no Egito, viu o mar se abrir, mas murmurou no deserto <span class="ref">(Êx 14–16)</span>. A fé que não é sustentada depois do livramento se transforma em ingratidão disfarçada de normalidade. Por isso Moisés adverte: <em>“Guarda-te, para que não te esqueças do Senhor… quando comeres e te fartares”</em> <span class="ref">(Dt 8:11–14)</span>.</p>
+
+                <p>O verdadeiro teste da maturidade espiritual não é <strong>orar quando falta</strong>, mas <strong>permanecer fiel quando sobra</strong>. Jó entendeu isso ao dizer: <em>“O Senhor o deu, o Senhor o tomou; bendito seja o nome do Senhor”</em> <span class="ref">(Jó 1:21)</span>. Sua fé não dependia do estado das circunstâncias, mas do caráter de Deus.</p>
+
+                <p>Cristo mesmo nos chama a essa estabilidade: <em>“Quem ouve estas minhas palavras e as pratica será comparado a um homem prudente, que edificou a sua casa sobre a rocha”</em> <span class="ref">(Mt 7:24)</span>. A casa firme não é a que evita tempestades, mas a que <strong>permanece a mesma antes e depois delas</strong>.</p>
+
+                <img src="22.12.25.10.33.30 - illustration - man praying.png" alt="Ilustração" class="destaque-img">
+
+                <p>Como evitar, então, a montanha-russa espiritual?</p>
+
+                <p>Primeiro, entendendo que <strong>disciplina precede sentimento</strong>. O justo vive pela fé <span class="ref">(Rm 1:17)</span>, não pela empolgação. Segundo, lembrando que a providência de Deus não é o fim do caminho, mas parte dele. Paulo diz que aprendeu a viver contente em toda e qualquer situação <span class="ref">(Fp 4:11–13)</span>, não apenas quando Deus resolvia seus problemas. Terceiro, cultivando práticas constantes — Palavra, oração, comunhão — não como remédio emergencial, mas como alimento diário.</p>
+
+                <p>Esperamos, sim, que o Senhor venha com a providência de que precisamos. Clamamos, pedimos, insistimos. Mas fazemos isso <strong>sem negociar nossa fidelidade</strong>. E quando Ele vem — porque vem — continuamos de pé, com a mesma fé, a mesma reverência e a mesma disciplina.</p>
+
+                <p>Porque maturidade espiritual não é subir muito alto nos bons dias, nem afundar nos maus. É <strong>permanecer firme</strong>, com os pés na rocha, em todos eles. ⏹</p>
+                
+                <footer>
+                    © Luís Felipe Bianchini | Soli Deo Gloria
+                </footer>
+            </article>
+        </main>
+    </div>
+
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const overlay = document.querySelector('.overlay');
+        const body = document.body;
+
+        function toggleMenu() {
+            body.classList.toggle('menu-open');
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+    </script>
+
+</body>
+</html>
