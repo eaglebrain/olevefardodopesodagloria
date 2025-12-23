@@ -9,7 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
-    <style>
+<style>
+        /* --- CSS ROBUSTO (MANTIDO COMPLETO PARA GARANTIR O VISUAL) --- */
         :root {
             --bg-color: #fdfdfd;
             --text-main: #1a1a1a;
@@ -30,70 +31,47 @@
             line-height: 1.7;
             font-size: 19px;
             font-weight: 300;
-            overflow-x: hidden; /* Evita rolagem lateral na animação */
+            overflow-x: hidden;
         }
 
-        /* --- BOTÃO HAMBÚRGUER (Só aparece no mobile) --- */
+        /* O CSS do botão continua aqui, pois o JS vai criar o elemento, 
+           mas o estilo vem daqui */
         .menu-toggle {
-            display: none; /* Escondido no PC */
-            position: fixed;
-            top: 1.5rem;
-            left: 1.5rem;
-            z-index: 1000;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
+            display: none;
+            position: fixed; top: 1.5rem; left: 1.5rem; z-index: 1000;
+            background: none; border: none; cursor: pointer; padding: 10px;
         }
 
-        /* Ícone do menu feito com CSS puro para leveza */
         .hamburger-icon {
-            width: 24px;
-            height: 2px;
-            background-color: var(--accent-color);
-            display: block;
-            position: relative;
-            transition: all 0.3s ease;
+            width: 24px; height: 2px; background-color: var(--accent-color);
+            display: block; position: relative; transition: all 0.3s ease;
         }
 
-        .hamburger-icon::before,
-        .hamburger-icon::after {
-            content: '';
-            width: 24px;
-            height: 2px;
-            background-color: var(--accent-color);
-            position: absolute;
-            left: 0;
-            transition: all 0.3s ease;
+        .hamburger-icon::before, .hamburger-icon::after {
+            content: ''; width: 24px; height: 2px; background-color: var(--accent-color);
+            position: absolute; left: 0; transition: all 0.3s ease;
         }
-
         .hamburger-icon::before { top: -8px; }
         .hamburger-icon::after { top: 8px; }
 
-        /* Animação do ícone quando ativo (vira um X) */
         .menu-open .hamburger-icon { background-color: transparent; }
         .menu-open .hamburger-icon::before { top: 0; transform: rotate(45deg); }
         .menu-open .hamburger-icon::after { top: 0; transform: rotate(-45deg); }
 
-
-        /* --- LAYOUT GRID --- */
+        /* Layout */
         .layout-container {
             display: grid;
             grid-template-columns: var(--sidebar-width) 1fr;
-            max-width: 1200px;
-            margin: 0 auto;
-            min-height: 100vh;
+            max-width: 1200px; margin: 0 auto; min-height: 100vh;
         }
 
-        /* --- SIDEBAR --- */
+        /* Sidebar */
         aside {
             padding: 4rem 2rem;
             border-right: 1px solid rgba(0,0,0,0.05);
             background-color: var(--bg-color);
             height: 100vh;
-            position: sticky;
-            top: 0;
-            z-index: 900;
+            position: sticky; top: 0; z-index: 900;
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
@@ -102,56 +80,39 @@
             font-size: 1.6rem;
             font-variant-caps: small-caps;
             margin-bottom: 3rem;
-            line-height: 1;
-            letter-spacing: -0.03em;
-            display: block;
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 600;
+            line-height: 1; letter-spacing: -0.03em;
+            display: block; color: var(--accent-color); text-decoration: none; font-weight: 600;
         }
 
         nav ul { list-style: none; }
         nav li { margin-bottom: 1rem; }
 
         nav a {
-            text-decoration: none;
-            color: var(--sidebar-text);
-            font-family: var(--font-display);
-            font-size: 1.1rem;
-            transition: all 0.4s ease;
-            display: block;
+            text-decoration: none; color: var(--sidebar-text);
+            font-family: var(--font-display); font-size: 1.1rem;
+            transition: all 0.4s ease; display: block;
         }
 
         nav a:hover, nav a.active {
-            color: var(--accent-color);
-            transform: translateX(5px);
+            color: var(--accent-color); transform: translateX(5px);
         }
-        
         nav a.active {
-            border-left: 1px solid var(--accent-color);
-            padding-left: 10px;
-            margin-left: -11px;
+            border-left: 1px solid var(--accent-color); padding-left: 10px; margin-left: -11px;
         }
 
-        /* --- CONTEÚDO --- */
+        /* Conteúdo */
         main { padding: 4rem 4rem 4rem 6rem; }
-
+        
         article {
-            max-width: 680px;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out forwards;
-            position: relative; 
-            overflow: visible; /* Garante que o destaque possa sair para fora da caixa */
+            max-width: 680px; opacity: 0; animation: fadeIn 1.5s ease-out forwards;
+            position: relative; overflow: visible;
         }
 
         header { margin-bottom: 5rem; text-align: center; }
 
         h1 {
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 5vw, 3.5rem);
-            color: var(--accent-color);
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
+            font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--accent-color); margin-bottom: 1.5rem; line-height: 1.1;
         }
 
         header::after {
@@ -172,6 +133,7 @@
         }
 
         em { color: var(--text-main); font-style: italic; }
+        strong { color: var(--text-main); font-weight: 600; }
         .ref { font-size: 0.9em; opacity: 0.8; font-variant-numeric: oldstyle-nums; }
         
         footer {
@@ -180,159 +142,60 @@
             border-top: 1px solid rgba(0,0,0,0.05); padding-top: 2rem;
         }
 
-        /* --- ESTILO DO DESTAQUE (PULL QUOTE) --- */
+        /* Pull Quote */
         .quote-destaque {
-            /* Estilo Visual "New Yorker" */
-            font-family: var(--font-display); /* Mesma fonte do Título */
-            font-size: 1.6rem;
-            line-height: 1.3;
-            color: var(--text-main);
-            background-color: var(--bg-color); /* Garante leitura sobrepondo linhas se houver */
-            
-            /* As Bordas Grossas */
-            border: 15px solid var(--accent-color);
-            padding: 1rem;   /* Espaço interno */
-            margin: 3rem 0;      /* Espaço externo vertical para mobile */
-            text-align: center;
-            position: relative;
-            
-            /* IMPORTANTE: Adicione essas propriedades */
-            display: block;
-            box-sizing: border-box;
-            
-            /* Remove qualquer espaçamento interno adicional */
+            font-family: var(--font-display); font-size: 1.6rem; line-height: 1.3;
+            color: var(--text-main); background-color: var(--bg-color);
+            border: 15px solid var(--accent-color); padding: 1rem; margin: 3rem 0;
+            text-align: center; position: relative; display: block; box-sizing: border-box;
             line-height: 1.3 !important;
         }
+        .quote-destaque p { margin: 0; padding: 0; }
+        aside.quote-destaque { background-color: var(--bg-color); height: auto; top: auto; z-index: auto; transform: none; box-shadow: none; }
 
-        /* Remove espaçamento extra de elementos aninhados */
-        .quote-destaque p {
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Remove herança indesejada do estilo do aside da sidebar */
-        aside.quote-destaque {
-            /* Redefine estilos do aside principal */
-            background-color: var(--bg-color);
-            height: auto;
-            top: auto;
-            z-index: auto;
-            padding: 1rem;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* --- COMPORTAMENTO RESPONSIVO --- */
-        /* --- AJUSTE PARA MOBILE --- */
+        /* Responsividade */
         @media (max-width: 1249px) {
             .quote-destaque {
-                /* Garante que o blockquote fique centralizado e no fluxo normal */
-                position: relative !important;
-                right: auto !important;
-                width: auto !important;
-                top: auto !important;
-                
-                /* Centraliza horizontalmente */
-                margin-left: auto;
-                margin-right: auto;
-                
-                /* Largura máxima para não ficar muito largo */
-                max-width: 95%;
-                
-                /* Ajusta o padding para mobile se necessário */
-                padding: 1.2rem !important;
+                position: relative !important; right: auto !important; width: auto !important; top: auto !important;
+                margin-left: auto; margin-right: auto; max-width: 95%; padding: 1.2rem !important;
             }
         }
-
-        /* Apenas em telas bem largas (Desktop - coluna lateral) */
         @media (min-width: 1250px) {
             .quote-destaque {
-                /* Mágica para tirar do fluxo do texto */
-                position: absolute;
-                right: -300px; /* Joga para fora à direita */
-                width: 240px;  /* Largura fixa da caixinha */
-                
-                /* Remove as margens que estavam criando o buraco */
-                margin: 0;
-                top: 35%; /* Ajuste manual: define a altura que ele aparece no texto */
-                
-                /* Ajuste fino de padding para telas grandes */
-                padding: 0.75rem 1rem;
+                position: absolute; right: -300px; width: 240px; margin: 0;
+                top: 25%; padding: 0.75rem 1rem;
             }
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- MÁSCARA ESCURA (Overlay) --- */
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255, 0.8);
-            backdrop-filter: blur(2px); /* Efeito de vidro fosco */
-            z-index: 800;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s ease;
+            background: rgba(255,255,255, 0.8); backdrop-filter: blur(2px);
+            z-index: 800; opacity: 0; visibility: hidden; transition: 0.3s ease;
         }
-
         .menu-open .overlay { opacity: 1; visibility: visible; }
 
-        /* --- RESPONSIVIDADE (MOBILE) --- */
         @media (max-width: 900px) {
-            .menu-toggle { display: block; } /* Mostra o botão */
-
-            .layout-container {
-                display: block; /* Remove o grid */
+            .menu-toggle { display: block; }
+            .layout-container { display: block; }
+            aside#sidebar-dinamica { /* ID adicionado para garantir especificidade */
+                position: fixed; top: 0; left: 0; width: 80%; max-width: 300px; height: 100vh;
+                transform: translateX(-100%); box-shadow: 5px 0 15px rgba(0,0,0,0.05);
             }
-
-            aside {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 80%; /* Largura do menu no mobile */
-                max-width: 300px;
-                height: 100vh;
-                transform: translateX(-100%); /* Esconde o menu para a esquerda */
-                box-shadow: 5px 0 15px rgba(0,0,0,0.05);
-            }
-
-            /* Quando a classe 'menu-open' é adicionada via JS, o menu aparece */
-            .menu-open aside {
-                transform: translateX(0);
-            }
-
-            main {
-                padding: 5rem 1.5rem 2rem 1.5rem; /* Ajusta padding para o topo não colar */
-            }
+            .menu-open aside#sidebar-dinamica { transform: translateX(0); }
+            main { padding: 5rem 1.5rem 2rem 1.5rem; }
         }
-
     </style>
 </head>
 <body>
 
-    <!-- Botão Hambúrguer -->
-    <button class="menu-toggle" aria-label="Abrir Menu">
-        <span class="hamburger-icon"></span>
-    </button>
-
-    <!-- Overlay (Fundo que escurece quando menu abre) -->
-    <div class="overlay"></div>
-
     <div class="layout-container">
         
-        <!-- SIDEBAR -->
-        <aside>
-            <a href="index.html" class="brand">O leve fardo <br /> do peso da <br /> glória ⏹</a>
-            <nav>
-                <ul>
-                    <li><a href="21.12.25.10.27.01 - index - o levo fardo do peso da gloria.html" class="active">Sombras ao Entardecer</a></li>
-                    <li><a href="22.12.25.10.23.34 - montanha-russa espiritual.html">A Montanha Russa Espiritual</a></li>
-                    <li><a href="texto3.html">Sobre a Esperança</a></li>
-                    <li><a href="contato.html">Sobre o Autor</a></li>
-                </ul>
-            </nav>
-        </aside>
+        <!-- O MENU SERÁ INJETADO AQUI PELO JAVASCRIPT -->
+        <aside id="sidebar-dinamica"></aside>
 
-        <!-- CONTEÚDO -->
+        <!-- CONTEÚDO PRINCIPAL -->
         <main>
             <article>
                 <header>
@@ -371,21 +234,8 @@
         </main>
     </div>
 
-    <!-- SCRIPT SIMPLES PARA O MENU FUNCIONAR -->
-    <script>
-        const menuToggle = document.querySelector('.menu-toggle');
-        const overlay = document.querySelector('.overlay');
-        const body = document.body;
-
-        // Função para abrir/fechar menu
-        function toggleMenu() {
-            body.classList.toggle('menu-open');
-        }
-
-        // Eventos de clique
-        menuToggle.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu); // Fecha se clicar fora
-    </script>
+    <!-- SCRIPT EXTERNO (O QUE FAZ A MÁGICA) -->
+    <script src="23.12.25.07.19.03 - menu.js"></script>
 
 </body>
 </html>

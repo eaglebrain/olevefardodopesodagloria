@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fervor todo dia, o dia todo</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS ROBUSTO (MANTIDO COMPLETO PARA GARANTIR O VISUAL) --- */
+        :root {
+            --bg-color: #fdfdfd;
+            --text-main: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --accent-color: #000000;
+            --sidebar-text: #888888;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Crimson Pro', serif;
+            --sidebar-width: 280px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.7;
+            font-size: 19px;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        /* O CSS do botão continua aqui, pois o JS vai criar o elemento, 
+           mas o estilo vem daqui */
+        .menu-toggle {
+            display: none;
+            position: fixed; top: 1.5rem; left: 1.5rem; z-index: 1000;
+            background: none; border: none; cursor: pointer; padding: 10px;
+        }
+
+        .hamburger-icon {
+            width: 24px; height: 2px; background-color: var(--accent-color);
+            display: block; position: relative; transition: all 0.3s ease;
+        }
+
+        .hamburger-icon::before, .hamburger-icon::after {
+            content: ''; width: 24px; height: 2px; background-color: var(--accent-color);
+            position: absolute; left: 0; transition: all 0.3s ease;
+        }
+        .hamburger-icon::before { top: -8px; }
+        .hamburger-icon::after { top: 8px; }
+
+        .menu-open .hamburger-icon { background-color: transparent; }
+        .menu-open .hamburger-icon::before { top: 0; transform: rotate(45deg); }
+        .menu-open .hamburger-icon::after { top: 0; transform: rotate(-45deg); }
+
+        /* Layout */
+        .layout-container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            max-width: 1200px; margin: 0 auto; min-height: 100vh;
+        }
+
+        /* Sidebar */
+        aside {
+            padding: 4rem 2rem;
+            border-right: 1px solid rgba(0,0,0,0.05);
+            background-color: var(--bg-color);
+            height: 100vh;
+            position: sticky; top: 0; z-index: 900;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .brand {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-variant-caps: small-caps;
+            margin-bottom: 3rem;
+            line-height: 1; letter-spacing: -0.03em;
+            display: block; color: var(--accent-color); text-decoration: none; font-weight: 600;
+        }
+
+        nav ul { list-style: none; }
+        nav li { margin-bottom: 1rem; }
+
+        nav a {
+            text-decoration: none; color: var(--sidebar-text);
+            font-family: var(--font-display); font-size: 1.1rem;
+            transition: all 0.4s ease; display: block;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-color); transform: translateX(5px);
+        }
+        nav a.active {
+            border-left: 1px solid var(--accent-color); padding-left: 10px; margin-left: -11px;
+        }
+
+        /* Conteúdo */
+        main { padding: 4rem 4rem 4rem 6rem; }
+        
+        article {
+            max-width: 680px; opacity: 0; animation: fadeIn 1.5s ease-out forwards;
+            position: relative; overflow: visible;
+        }
+
+        header { margin-bottom: 5rem; text-align: center; }
+
+        h1 {
+            font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--accent-color); margin-bottom: 1.5rem; line-height: 1.1;
+        }
+
+        header::after {
+            content: ""; display: block; width: 60px; height: 1px;
+            background-color: var(--text-main); margin: 0 auto; opacity: 0.3;
+        }
+
+        .destaque-img {
+            display: block; max-width: 100%; height: auto;
+            margin: 1.5rem auto; border-radius: 2px; opacity: 0.95;
+        }
+
+        p { margin-bottom: 1.5rem; color: var(--text-secondary); text-align: left; }
+        
+        p:first-of-type::first-letter {
+            float: left; font-family: var(--font-display); font-size: 4.8rem;
+            line-height: 0.75; padding-right: 12px; padding-top: 4px; color: var(--accent-color);
+        }
+
+        em { color: var(--text-main); font-style: italic; }
+        strong { color: var(--text-main); font-weight: 600; }
+        .ref { font-size: 0.9em; opacity: 0.8; font-variant-numeric: oldstyle-nums; }
+        
+        footer {
+            margin-top: 5rem; text-align: center; font-size: 0.85rem;
+            color: #ccc; font-family: var(--font-display); font-style: italic;
+            border-top: 1px solid rgba(0,0,0,0.05); padding-top: 2rem;
+        }
+
+        /* Pull Quote */
+        .quote-destaque {
+            font-family: var(--font-display); font-size: 1.6rem; line-height: 1.3;
+            color: var(--text-main); background-color: var(--bg-color);
+            border: 15px solid var(--accent-color); padding: 1rem; margin: 3rem 0;
+            text-align: center; position: relative; display: block; box-sizing: border-box;
+            line-height: 1.3 !important;
+        }
+        .quote-destaque p { margin: 0; padding: 0; }
+        aside.quote-destaque { background-color: var(--bg-color); height: auto; top: auto; z-index: auto; transform: none; box-shadow: none; }
+
+        /* Responsividade */
+        @media (max-width: 1249px) {
+            .quote-destaque {
+                position: relative !important; right: auto !important; width: auto !important; top: auto !important;
+                margin-left: auto; margin-right: auto; max-width: 95%; padding: 1.2rem !important;
+            }
+        }
+        @media (min-width: 1250px) {
+            .quote-destaque {
+                position: absolute; right: -300px; width: 240px; margin: 0;
+                top: 25%; padding: 0.75rem 1rem;
+            }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255, 0.8); backdrop-filter: blur(2px);
+            z-index: 800; opacity: 0; visibility: hidden; transition: 0.3s ease;
+        }
+        .menu-open .overlay { opacity: 1; visibility: visible; }
+
+        @media (max-width: 900px) {
+            .menu-toggle { display: block; }
+            .layout-container { display: block; }
+            aside#sidebar-dinamica { /* ID adicionado para garantir especificidade */
+                position: fixed; top: 0; left: 0; width: 80%; max-width: 300px; height: 100vh;
+                transform: translateX(-100%); box-shadow: 5px 0 15px rgba(0,0,0,0.05);
+            }
+            .menu-open aside#sidebar-dinamica { transform: translateX(0); }
+            main { padding: 5rem 1.5rem 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="layout-container">
+        
+        <!-- O MENU SERÁ INJETADO AQUI PELO JAVASCRIPT -->
+        <aside id="sidebar-dinamica"></aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main>
+            <article>
+                <header>
+                    <h1>Fervor todo dia, o dia todo</h1>
+                    <img src="23.12.25.07.54.52 - illustration - faith all day long.png" alt="Ilustração decorativa" class="destaque-img">
+                </header>
+
+                <p>O fervor espiritual que a Escritura nos apresenta não é um estado de excitação ocasional, nem um pico emocional reservado a momentos litúrgicos especiais. Ele é, antes, um <strong>modo de existir diante de Deus</strong> — contínuo, silencioso às vezes, mas profundo; discreto na forma, porém intenso no conteúdo. É um fogo que não se apaga quando termina o culto, nem se limita às grandes decisões da vida. Ele atravessa o dia inteiro e alcança tudo o que fazemos, do gesto mais simples ao ato mais solene.</p>
+
+                <p>O apóstolo Paulo expressa isso com clareza quando escreve: <em>“Sede fervorosos no espírito, servindo ao Senhor”</em> <span class="ref">(Rm 12:11)</span>. Note que o fervor não é apresentado como algo autônomo, voltado para si mesmo, mas como um calor interior que se manifesta no serviço. O texto não fala de entusiasmo passageiro, mas de uma disposição constante da alma — um espírito aquecido pela consciência de que toda a vida é vivida <strong>coram Deo</strong>, diante do Senhor.</p>
+
+                <p>Esse mesmo princípio aparece quando Paulo exorta: <em>“Quer comais, quer bebais, ou façais qualquer outra coisa, fazei tudo para a glória de Deus”</em> <span class="ref">(1Co 10:31)</span>. O fervor espiritual bíblico não separa o sagrado do cotidiano; ele consagra o cotidiano. Comer, beber, trabalhar, caminhar, falar — tudo se torna altar quando feito com o coração orientado para Deus. A espiritualidade madura não vive de interrupções extraordinárias, mas de fidelidade ordinária.</p>
+
+                <aside class="quote-destaque">O fervor espiritual bíblico não separa o sagrado do cotidiano; ele consagra o cotidiano.</aside>
+
+                <p>Jesus ensinou algo semelhante ao resumir toda a Lei: <em>“Amarás o Senhor teu Deus de todo o teu coração, de toda a tua alma e de todo o teu entendimento”</em> <span class="ref">(Mt 22:37)</span>. Esse “todo” não admite compartimentos. O fervor espiritual não ocupa apenas um espaço da agenda; ele permeia o tempo inteiro. Não é um interruptor que ligamos quando convém, mas uma chama que aquece cada decisão, cada reação, cada silêncio.</p>
+
+                <p>Aqui é importante um equilíbrio: a Bíblia não nos conclama a um fervor ansioso, nervoso ou teatral. O fogo que Deus deseja não é o da palha que queima rápido e vira cinza, mas o da lâmpada que permanece acesa noite após noite. O livro de Provérbios nos lembra que <em>“o caminho do justo é como a luz da aurora, que vai brilhando mais e mais até ser dia perfeito”</em> <span class="ref">(Pv 4:18)</span>. O fervor verdadeiro cresce com constância; ele amadurece.</p>
+
+                <p>Por isso, o Salmo 1 descreve o justo não como alguém que vive em êxtase permanente, mas como uma árvore plantada junto às águas, que dá fruto no tempo certo e cuja folha não murcha. Há vigor, há vida, há continuidade. O fervor espiritual constante é esse enraizamento profundo na Palavra, que sustenta tanto os dias luminosos quanto os dias nublados.</p>
+
+                <img src="23.12.25.07.57.34 - illustration - tree and river.png" alt="Ilustração decorativa" class="destaque-img">
+
+                <p>Quando entendemos isso, percebemos que o fervor espiritual não nos afasta das responsabilidades do mundo — ele nos torna mais atentos nelas. Trabalhamos com diligência porque sabemos para quem trabalhamos. Falamos com cuidado porque nossas palavras também pertencem a Deus. Descansamos com gratidão porque o descanso, igualmente, é ato de fé.</p>
+
+                <p>Viver assim é atender ao chamado de Jesus: <em>“Permanecei em mim, e eu permanecerei em vós”</em> <span class="ref">(Jo 15:4)</span>. Permanecer não é visitar; é habitar. É permitir que a vida inteira — do levantar ao deitar, do trivial ao decisivo — seja atravessada pela presença de Cristo.</p>
+
+                <p>Que o Senhor nos conceda esse fervor sereno e firme: não barulhento, mas fiel; não intermitente, mas constante. Um fogo que dura o dia inteiro, que ilumina as pequenas escolhas e sustenta as grandes, e que transforma toda a vida em um ato contínuo de adoração. ⏹</p>
+                
+                <footer>
+                    © Luís Felipe Bianchini | Soli Deo Gloria
+                </footer>
+            </article>
+        </main>
+    </div>
+
+    <!-- SCRIPT EXTERNO (O QUE FAZ A MÁGICA) -->
+    <script src="23.12.25.07.19.03 - menu.js"></script>
+
+</body>
+</html>
