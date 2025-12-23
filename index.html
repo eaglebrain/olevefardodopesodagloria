@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sombras ao Entardecer</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+        /* --- CSS ROBUSTO (MANTIDO COMPLETO PARA GARANTIR O VISUAL) --- */
+        :root {
+            --bg-color: #fdfdfd;
+            --text-main: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --accent-color: #000000;
+            --sidebar-text: #888888;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Crimson Pro', serif;
+            --sidebar-width: 280px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.7;
+            font-size: 19px;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        /* O CSS do botão continua aqui, pois o JS vai criar o elemento, 
+           mas o estilo vem daqui */
+        .menu-toggle {
+            display: none;
+            position: fixed; top: 1.5rem; left: 1.5rem; z-index: 1000;
+            background: none; border: none; cursor: pointer; padding: 10px;
+        }
+
+        .hamburger-icon {
+            width: 24px; height: 2px; background-color: var(--accent-color);
+            display: block; position: relative; transition: all 0.3s ease;
+        }
+
+        .hamburger-icon::before, .hamburger-icon::after {
+            content: ''; width: 24px; height: 2px; background-color: var(--accent-color);
+            position: absolute; left: 0; transition: all 0.3s ease;
+        }
+        .hamburger-icon::before { top: -8px; }
+        .hamburger-icon::after { top: 8px; }
+
+        .menu-open .hamburger-icon { background-color: transparent; }
+        .menu-open .hamburger-icon::before { top: 0; transform: rotate(45deg); }
+        .menu-open .hamburger-icon::after { top: 0; transform: rotate(-45deg); }
+
+        /* Layout */
+        .layout-container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            max-width: 1200px; margin: 0 auto; min-height: 100vh;
+        }
+
+        /* Sidebar */
+        aside {
+            padding: 4rem 2rem;
+            border-right: 1px solid rgba(0,0,0,0.05);
+            background-color: var(--bg-color);
+            height: 100vh;
+            position: sticky; top: 0; z-index: 900;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .brand {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-variant-caps: small-caps;
+            margin-bottom: 3rem;
+            line-height: 1; letter-spacing: -0.03em;
+            display: block; color: var(--accent-color); text-decoration: none; font-weight: 600;
+        }
+
+        nav ul { list-style: none; }
+        nav li { margin-bottom: 1rem; }
+
+        nav a {
+            text-decoration: none; color: var(--sidebar-text);
+            font-family: var(--font-display); font-size: 1.1rem;
+            transition: all 0.4s ease; display: block;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-color); transform: translateX(5px);
+        }
+        nav a.active {
+            border-left: 1px solid var(--accent-color); padding-left: 10px; margin-left: -11px;
+        }
+
+        /* Conteúdo */
+        main { padding: 4rem 4rem 4rem 6rem; }
+        
+        article {
+            max-width: 680px; opacity: 0; animation: fadeIn 1.5s ease-out forwards;
+            position: relative; overflow: visible;
+        }
+
+        header { margin-bottom: 5rem; text-align: center; }
+
+        h1 {
+            font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--accent-color); margin-bottom: 1.5rem; line-height: 1.1;
+        }
+
+        header::after {
+            content: ""; display: block; width: 60px; height: 1px;
+            background-color: var(--text-main); margin: 0 auto; opacity: 0.3;
+        }
+
+        .destaque-img {
+            display: block; max-width: 100%; height: auto;
+            margin: 1.5rem auto; border-radius: 2px; opacity: 0.95;
+        }
+
+        p { margin-bottom: 1.5rem; color: var(--text-secondary); text-align: left; }
+        
+        p:first-of-type::first-letter {
+            float: left; font-family: var(--font-display); font-size: 4.8rem;
+            line-height: 0.75; padding-right: 12px; padding-top: 4px; color: var(--accent-color);
+        }
+
+        em { color: var(--text-main); font-style: italic; }
+        strong { color: var(--text-main); font-weight: 600; }
+        .ref { font-size: 0.9em; opacity: 0.8; font-variant-numeric: oldstyle-nums; }
+        
+        footer {
+            margin-top: 5rem; text-align: center; font-size: 0.85rem;
+            color: #ccc; font-family: var(--font-display); font-style: italic;
+            border-top: 1px solid rgba(0,0,0,0.05); padding-top: 2rem;
+        }
+
+        /* Pull Quote */
+        .quote-destaque {
+            font-family: var(--font-display); font-size: 1.6rem; line-height: 1.3;
+            color: var(--text-main); background-color: var(--bg-color);
+            border: 15px solid var(--accent-color); padding: 1rem; margin: 3rem 0;
+            text-align: center; position: relative; display: block; box-sizing: border-box;
+            line-height: 1.3 !important;
+        }
+        .quote-destaque p { margin: 0; padding: 0; }
+        aside.quote-destaque { background-color: var(--bg-color); height: auto; top: auto; z-index: auto; transform: none; box-shadow: none; }
+
+        /* Responsividade */
+        @media (max-width: 1249px) {
+            .quote-destaque {
+                position: relative !important; right: auto !important; width: auto !important; top: auto !important;
+                margin-left: auto; margin-right: auto; max-width: 95%; padding: 1.2rem !important;
+            }
+        }
+        @media (min-width: 1250px) {
+            .quote-destaque {
+                position: absolute; right: -300px; width: 240px; margin: 0;
+                top: 25%; padding: 0.75rem 1rem;
+            }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255, 0.8); backdrop-filter: blur(2px);
+            z-index: 800; opacity: 0; visibility: hidden; transition: 0.3s ease;
+        }
+        .menu-open .overlay { opacity: 1; visibility: visible; }
+
+        @media (max-width: 900px) {
+            .menu-toggle { display: block; }
+            .layout-container { display: block; }
+            aside#sidebar-dinamica { /* ID adicionado para garantir especificidade */
+                position: fixed; top: 0; left: 0; width: 80%; max-width: 300px; height: 100vh;
+                transform: translateX(-100%); box-shadow: 5px 0 15px rgba(0,0,0,0.05);
+            }
+            .menu-open aside#sidebar-dinamica { transform: translateX(0); }
+            main { padding: 5rem 1.5rem 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="layout-container">
+        
+        <!-- O MENU SERÁ INJETADO AQUI PELO JAVASCRIPT -->
+        <aside id="sidebar-dinamica"></aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main>
+            <article>
+                <header>
+                    <h1>Sombras ao entardecer</h1>
+                    <img src="21.12.25.09.53.32 - illustration - shadow growing - no bg.png" alt="Ilustração" class="destaque-img">
+                </header>
+
+                <p>Aquilo que chamamos de "nossos problemas" muitas vezes crescem dentro de nós como sombras ao entardecer: quanto mais o dia avança, maiores parecem ficar. Não porque realmente tenham aumentado, mas porque a luz diminuiu. A Bíblia nos ensina repetidas vezes que muitos dos nossos sofrimentos não são tão grandes quanto pensamos —o que os torna grandes, na verdade, é o nosso olhar que fica míope quando perde a refração da glória de Deus.</p>
+
+                <p>Jesus foi direto ao ponto quando disse: <em>“Basta a cada dia o seu próprio mal”</em> <span class="ref">(Mt 6:34)</span>. Ele não negou que há problemas; apenas nos proibiu de acumulá-los, ampliá-los e projetá-los para além do que realmente são. Grande parte do peso que carregamos não vem da realidade, mas da antecipação ansiosa, do “e se”, do medo de cenários que sequer existem.</p>
+
+                <p>O salmista, acuado por inimigos reais, declara: <em>“Engrandecei o Senhor comigo”</em> <span class="ref">(Sl 34:3)</span>. Note: não é o problema que deve ser engrandecido, mas o Senhor. Quando fazemos o contrário — quando engrandecemos o problema — Deus parece pequeno, distante, quase irrelevante. Mas isso é uma distorção da percepção, não da realidade. Deus continua sendo Deus; somos nós que encolhemos o campo de visão.</p>
+
+                <!-- COMEÇA O BLOCO DE DESTAQUE -->
+                <aside class="quote-destaque">Grande parte do peso que carregamos não vem da realidade, mas da antecipação ansiosa.</aside>
+                <!-- TERMINA O BLOCO DE DESTAQUE -->
+
+                <p>A Escritura também nos lembra que aquilo que hoje nos oprime é, muitas vezes, temporário e pedagógico: <em>“Porque a nossa leve e momentânea tribulação produz para nós eterno peso de glória”</em> <span class="ref">(2Co 4:17)</span>. Paulo não chama o sofrimento de “leve” por sadismo espiritual, mas por comparação. Quando colocado diante da eternidade, até o fardo mais pesado perde proporção.</p>
+
+                <p>Além disso, quantas vezes sofremos por coisas que nunca acontecerão? O livro de Provérbios diz: <em>“O coração ansioso deprime o homem”</em> <span class="ref">(Pv 12:25)</span>. Não é o problema em si que paralisa, mas o coração que o rumina sem descanso. A ansiedade é uma lente de aumento que deforma a realidade.</p>
+
+                <p>Deus, por sua vez, insiste em nos lembrar do básico: Ele governa até os detalhes mínimos. <em>“Não se vendem dois pardais por um asse? E nenhum deles cairá em terra sem o consentimento de vosso Pai”</em> <span class="ref">(Mt 10:29)</span>. Se Deus cuida dos pardais, por que imaginamos que nossas crises escaparam do Seu controle?</p>
+
+                <p>Muitas vezes, o que chamamos de “grande problema” é apenas um chamado ao descanso, à confiança e à obediência simples. <em>“Aquietai-vos e sabei que eu sou Deus”</em> <span class="ref">(Sl 46:10)</span>. A quietude não elimina o problema, mas o recoloca no lugar correto.</p>
+
+                <img src="21.12.25.11.49.46.png" alt="Ilustração" class="destaque-img">
+
+                <p>No fim, nossos problemas não diminuem porque os resolvemos todos, mas porque reaprendemos a olhar para eles à luz de quem Deus é. Quando Deus volta ao centro, os problemas retornam ao tamanho real — e descobrimos que não éramos tão frágeis quanto pensávamos, nem a situação tão definitiva quanto temíamos.</p>
+
+                <p>Às vezes, o maior milagre não é Deus mudar a circunstância, mas ajustar a nossa percepção. E, quase sempre, isso já é mais do que suficiente. ⏹</p>
+                
+                <footer>
+                    © Luís Felipe Bianchini | Soli Deo Gloria
+                </footer>
+            </article>
+        </main>
+    </div>
+
+    <!-- SCRIPT EXTERNO (O QUE FAZ A MÁGICA) -->
+    <script src="23.12.25.07.19.03 - menu.js"></script>
+
+</body>
+</html>
