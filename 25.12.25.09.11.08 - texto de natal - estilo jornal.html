@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Jornal Clássico</title>
+    
+    <!-- Importando fontes elegantes do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CONFIGURAÇÕES GERAIS (TELA) --- */
+        :root {
+            --bg-color: #fdfbf7; /* Um tom de papel envelhecido leve para tela */
+            --ink-color: #1a1a1a; /* Quase preto, para suavizar a leitura */
+            --accent-color: #2c2c2c;
+            --paper-width: 210mm; /* Largura A4 */
+            --paper-height: 297mm; /* Altura A4 */
+        }
+
+        body {
+            background-color: #e0e0e0; /* Fundo da janela do navegador */
+            font-family: 'Lora', serif;
+            color: var(--ink-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* A "Folha" de Papel na Tela */
+        .page {
+            background-color: var(--bg-color);
+            width: var(--paper-width);
+            min-height: var(--paper-height);
+            padding: 20mm; /* Margens internas */
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        /* --- TIPOGRAFIA --- */
+        h1, h2, h3, .masthead {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 11pt;
+            line-height: 1.6;
+            text-align: justify; /* Justificado como jornal */
+            hyphens: auto; /* Hifenização automática para evitar buracos */
+            margin-bottom: 1em;
+        }
+
+        /* --- ELEMENTOS DO JORNAL --- */
+        
+        /* Cabeçalho Principal (Masthead) */
+        header.journal-header {
+            text-align: center;
+            border-bottom: 3px double var(--ink-color);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+        }
+
+        .journal-title {
+            font-size: 48pt;
+            font-variant: small-caps;
+            /* text-transform: uppercase; */
+            letter-spacing: -1px;
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+
+        .journal-meta {
+            font-family: 'Playfair Display', serif;
+            font-size: 9pt;
+            text-transform: uppercase;
+            border-top: 1px solid var(--ink-color);
+            border-bottom: 1px solid var(--ink-color);
+            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        /* Manchete do Artigo */
+        .headline {
+            font-size: 24pt;
+            line-height: 1.2;
+            text-align: center;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .sub-headline {
+            font-family: 'Lora', serif;
+            font-size: 12pt;
+            text-align: center;
+            font-weight: 400;
+            margin-bottom: 25px;
+            color: #444;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Layout em Colunas */
+        .content-columns {
+            column-count: 2;
+            column-gap: 10mm;
+            column-rule: 1px solid #ddd; /* Linha fina entre colunas */
+        }
+
+        /* Letra Capitular (Drop Cap) */
+        .drop-cap::first-letter {
+            float: left;
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            line-height: 0.8;
+            padding-right: 8px;
+            padding-top: 4px;
+            font-weight: 700;
+        }
+
+        /* Citações (Pull quotes) */
+        .pull-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4em;
+            font-style: italic;
+            text-align: center;
+            border-top: 1px solid var(--ink-color);
+            border-bottom: 1px solid var(--ink-color);
+            padding: 15px;
+            margin: 20px 0;
+            break-inside: avoid; /* Evita quebrar a citação entre páginas/colunas */
+        }
+
+
+        /* --- ESTILO DE IMAGENS CLÁSSICAS --- */
+
+        /* Container da Imagem (Figura) */
+        figure.journal-figure {
+            margin: 0 0 25px 0; /* Espaço abaixo da imagem */
+            width: 100%;
+            break-inside: avoid; /* Impede que a imagem seja cortada ao imprimir ou mudar de coluna */
+            page-break-inside: avoid;
+        }
+
+        /* A Imagem em si */
+        img.journal-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            
+            /* Moldura Estilo Jornal */
+            border: 1px solid #111; /* Borda fina preta */
+            padding: 4px; /* Espaço entre imagem e borda */
+            background-color: white; /* Fundo branco entre a imagem e a borda */
+            box-sizing: border-box;
+
+            /* Filtro "Tinta de Jornal" (Opcional - deixa a foto com cara de impressa) */
+            /* Remove a cor vibrante e aumenta contraste */
+            filter: grayscale(100%) contrast(1.2) brightness(0.95); 
+            transition: filter 0.3s ease;
+        }
+
+        /* Efeito ao passar o mouse (opcional: revela a cor original na tela) */
+        img.journal-img:hover {
+            filter: grayscale(0%);
+        }
+
+        /* Legenda da Imagem */
+        figcaption {
+            font-family: 'Lora', serif;
+            font-size: 9pt;
+            font-style: italic;
+            text-align: center;
+            margin-top: 8px;
+            color: #444;
+            line-height: 1.3;
+            padding: 0 10px;
+        }
+
+        /* --- VARIAÇÕES DE POSIÇÃO --- */
+
+        /* Imagem de Destaque (Atravessa as duas colunas) */
+        /* Use logo após o título e antes do texto */
+        figure.full-width {
+            column-span: all; /* Comando mágico para furar as colunas */
+            margin-bottom: 35px;
+            max-width: 100%;
+        }
+
+        /* Imagem Pequena Flutuando no Texto (Estilo Retrato) */
+        figure.float-left {
+            float: left;
+            width: 45%; /* Ocupa pouco menos da metade da coluna */
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+
+        figure.float-right {
+            float: right;
+            width: 45%;
+            margin-left: 15px;
+            margin-bottom: 10px;
+        }
+
+        /* --- AJUSTES MOBILE PARA IMAGENS --- */
+        @media screen and (max-width: 800px) {
+            /* No celular, removemos os floats para a imagem ficar grande e legível */
+            figure.float-left, 
+            figure.float-right {
+                float: none;
+                width: 100%;
+                margin: 20px 0;
+            }
+            
+            img.journal-img {
+                /* No celular, talvez queiramos ver a cor original ou menos contraste */
+                filter: grayscale(0%); 
+            }
+        }
+
+        /* --- RESPONSIVIDADE (MOBILE) --- */
+        @media screen and (max-width: 800px) {
+            body {
+                padding: 0;
+                background-color: var(--bg-paper); /* O fundo vira a cor do papel */
+            }
+
+            .page {
+                width: 100%;
+                min-height: 100vh;
+                padding: 20px 20px; /* Margens menores */
+                box-shadow: none; /* Remove a sombra de "folha" */
+            }
+
+            .journal-title {
+                font-size: 34pt; /* Título menor */
+            }
+
+            .journal-meta {
+                flex-direction: column; /* Meta dados empilhados */
+                align-items: center;
+                gap: 7px;
+            }
+
+            .headline {
+                font-size: 18pt;
+            }
+
+            .sub-headline {
+                width: 100%;
+                font-size: 11pt;
+            }
+
+            /* Transforma em coluna única para leitura no celular */
+            .content-columns {
+                column-count: 1;
+                column-gap: 0;
+                column-rule: none;
+            }
+
+            p {
+                font-size: 12pt; /* Fonte levemente maior para ler no celular */
+                text-align: justify; /* Mantém a elegância, mas cuidado com hifens */
+            }
+            
+            /* Ajuste da capitular para não quebrar em telas muito pequenas */
+            .drop-cap::first-letter {
+                font-size: 3.2em;
+            }
+        }
+
+        /* --- CONFIGURAÇÕES DE IMPRESSÃO --- */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .page {
+                width: 100%;
+                height: auto;
+                box-shadow: none;
+                margin: 0;
+                padding: 0; /* As margens são controladas pelo @page */
+                background-color: white;
+            }
+
+            /* Define margens físicas da impressora */
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+
+            /* Garante que o texto seja preto puro para economizar tinta colorida */
+            * {
+                color: #000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        
+        <!-- Cabeçalho do Jornal -->
+        <header class="journal-header">
+            <div class="journal-title">Jesus Nasceu, Tudo se Fez Novo</div>
+            <div class="journal-meta">
+                <span>Vol. I, No. 1 (único)</span>
+                <span>São Paulo-Bauru, 25 de Dezembro de 2025</span>
+                <span>Preço: Apenas sua Atenção</span>
+            </div>
+        </header>
+
+        <!-- Artigo Principal -->
+        <article>
+
+            <div class="headline-section">
+                <h1 class="headline">O Prisma da Manjedoura, o Fanal da Luz Eterna e a Refração da Graça</h1>
+                <h3 class="sub-headline">A encarnação de Cristo transfigura o tempo, extinguindo as sombras do ontem para inaugurar a absoluta e eterna novidade divina.</h3>
+            </div>
+
+            <div class="content-columns">
+                <p class="drop-cap no-indent">
+                    No coração da noite mais densa que a humanidade já atravessou, quando o silêncio profético de quatrocentos anos parecia ter cristalizado a esperança em um gélido desespero, o tempo, esse mestre implacável das horas, submeteu-se ao <em>Kairos</em> da eternidade.
+                </p>
+
+                <p>
+                    Naquela noite de Natal, assim que o primeiro choro de Jesus ecoou pelos umbrais de uma estrebaria rústica, as estruturas do universo sofreram um abalo inexorável, pois Aquele que sustenta as galáxias com o poder de Sua palavra aceitou a fragilidade de um invólucro humano, fazendo com que, naquele exato instante, <strong>tudo se fizesse novo.</strong>
+                </p>
+
+                <p>
+                    A encarnação não foi apenas um evento cronológico, mas uma ruptura ontológica na história. Foi o momento em que o Sol da Justiça, profetizado por Malaquias, desintegrou as sombras do crepúsculo espiritual, inaugurando uma aurora que não conhece poente.
+                </p>
+
+                <p>
+                    Se outrora o profeta Isaías vaticinara que o povo que caminhava em trevas veria uma grande luz, o nascimento de Cristo foi a materialização desse clarão, transformando a manjedoura em um prisma sagrado onde a glória de Deus, antes inacessível e terrível em sua santidade, se decompôs nas cores suaves da graça e da misericórdia.
+                </p>
+
+                <p>
+                    Imagine um deserto vasto e árido, onde por milênios nenhuma gota de orvalho ousou tocar a areia crestada, e subitamente, no meio de uma noite estéril, uma fonte rompe o chão com tal ímpeto que todo o ecossistema é transfigurado em questão de segundos. Assim foi a vinda do Messias.
+                </p>
+
+                <p>
+                    A Bíblia nos ensina, em passagens como o prólogo de João, que o Verbo se fez carne e habitou entre nós, e essa "habitualidade" divina entre os homens recalibrou a própria natureza da realidade imanente. No momento em que Maria acalentou o infante, o abismo intransponível entre o Criador e a criatura foi preenchido pela ponte de carne do Emanuel.
+                </p>
+
+                <p>
+                    É como a famosa história da Trégua de Natal de 1914, nas trincheiras da Primeira Guerra Mundial, onde o som de hinos natalinos fez com que inimigos mortais depusessem as armas, compartilhassem víveres e enterrassem seus mortos em uma paz efêmera, porém profética.
+                </p>
+
+                <div class="pull-quote">
+                    "No momento em que Maria acalentou o infante, o abismo intransponível entre o Criador e a criatura foi preenchido pela ponte de carne do Emanuel."
+                </div>
+
+                <p>
+                    O nascimento de Jesus representou algo semelhante, com a diferença de que não foi temporário. Nele, a Velha Aliança, marcada pelo rigor da lei e pelo sangue de bodes que apenas cobria o pecado, foi subitamente envolta pela Nova Aliança, onde o sangue que corria nas veias daquele recém-nascido estava destinado a remover, e não apenas ocultar, a mácula da transgressão.
+                </p>
+
+                <p>
+                    A novidade de Cristo é tão absoluta que São Paulo, em sua epístola aos Coríntios, afirma que, se alguém está em Cristo, é uma nova criatura, pois as coisas velhas passaram e tudo se fez novo; essa <em>metanoia</em> cósmica começou ali, entre o feno e o hálito dos animais, onde a realeza foi redefinida pela humildade e a força pela vulnerabilidade.
+                </p>
+
+                <p>
+                    Podemos ilustrar essa transformação como o despertar de um homem que viveu toda a sua existência em um quarto sem janelas, conhecendo o mundo apenas por sombras e sussurros, e que, em um piscar de olhos, é transportado para o cume de uma montanha ao meio-dia; a luz não apenas ilumina o que já existia, ela revela cores e profundidades que ele sequer era capaz de imaginar.
+                </p>
+
+                <p>
+                    Jesus, ao nascer, trouxe essa "nova visão". Ele não veio para reformar o velho sistema, mas para vivificar o que estava morto, soprando um novo <em>ruah</em> sobre a argila cansada da humanidade.
+                </p>
+
+                <p>
+                    O nascimento em Belém foi o "haja luz" da segunda criação. Se no Gênesis Deus disse "haja luz" para organizar o caos físico, no Natal Ele disse <strong>"haja Vida"</strong> na pessoa de Seu Filho para organizar o caos moral e espiritual. Por isso, a noite de Natal transborda um perfume de renovação que permeia cada átomo da existência. A própria criação, que segundo Romanos 8 geme com dores de parto, sentiu naquele instante o alívio de que o Redentor havia chegado para resgatá-la da vaidade e da corrupção.
+                </p>
+
+                <p>
+                    Não há como ignorar a magnitude desse evento que segmentou a história em antes e depois, transformando a contagem dos dias em um tributo perpétuo à Sua vinda. A novidade trazida pelo Menino-Deus é como uma melodia inaudita que, uma vez executada, altera o silêncio de todo o universo para sempre.
+                </p>
+
+                <p>
+                    É o paradoxo do Infinito contido no finito, do Eterno submetido ao tempo, do Todo-Poderoso dependente de um colo materno. Essa humildade inefável quebrou a espinha dorsal do orgulho humano e estabeleceu uma nova ética baseada no amor sacrificial.
+                </p>
+
+                <p>
+                    Ao contemplarmos a manjedoura sob a lente das Escrituras, percebemos que ali, entre os pastores e os magos, a dignidade humana foi restaurada ao seu status original, pois Deus, ao assumir a nossa forma, santificou a nossa biologia e elevou a nossa esperança para além das esferas celestes. Tudo se fez novo porque o próprio Amor, em sua essência mais pura e despojada, decidiu caminhar sobre o nosso pó.
+                </p>
+                
+                <p>
+                    Portanto, o Natal é a celebração da novidade absoluta, o ponto de inflexão onde a desesperança se dissolve na certeza de que Deus não desistiu de Sua obra, mas veio habitar dentro dela para transfigurá-la de dentro para fora, para todo o sempre.
+                </p>
+
+                <p>
+                    Diante de tão sublime mistério que abala as fundações do cosmos, é necessário um gesto de entrega absoluta sob a luz refulgente da estrela de Belém. É necessário nos despojarmos, sem hesitação, das vestes rotas por traumas pretéritos, das algemas invisíveis das angústias que nos acorrentam a invernos findos e dos escombros de uma identidade que já não nos pertence, pois o Menino que hoje repousa sobre a palha é o mesmo que, por Sua vinda, riscou a cédula da dívida que nos era contrária.
+                </p>
+
+                <p>
+                    Se o próprio Criador se esvaziou de Sua glória para revestir-Se da nossa fragilidade, que motivo restaria para guardarmos em nosso íntimo o peso morto de fatos passados ou o atavismo de nossa melancolia? Deixemos que o que já foi se dissolva como a névoa matinal perante o Sol da Justiça, pois nesta noite sagrada, o tempo foi redimido e vossa alma é convidada a ser um palimpsesto onde a graça divina escreve uma história inédita.
+                </p>
+
+                <p>
+                    Assim como o prisioneiro que abandona o cárcere ao ver as portas se abrirem por um milagre, ou como a crisálida que rompe o casulo para abraçar uma liberdade antes impensável, abandonemos as velhas estruturas de nossa vida, pois Aquele que nasceu em Belém não aceita remendos em panos velhos, mas oferece-nos um manto novo.
+                </p>
+
+                <p>
+                    Não olhemos para trás com o saudosismo das sombras, pois o Natal é o decreto divino de que a nossa história não está selada pelo que <em>nós fomos</em>, mas pelo que <strong>Ele é</strong>. Abracemos a novidade radical deste dia, permitindo que nossa existência seja como o odre novo que recebe o vinho fresco da eternidade, e certos de que, sob o teto daquela estrebaria, o "antigo" foi irrevogavelmente superado e o "agora" brilha com a intensidade de uma aurora eterna, proclamando que, em Cristo, a nossa vida acaba de, verdadeiramente, <strong>recomeçar</strong>. ❧
+                </p>
+
+                <figure class="journal-figure">
+                    <img src="25.12.25.09.19.44 - foto de natal - matheus pamela luis felipe.png" alt="Descrição" class="journal-img">
+                    <figcaption>Celebrar o Natal em família é honrar o fato de que a Luz Eterna escolheu a intimidade do lar como seu primeiro palco.</figcaption>
+                </figure>
+
+            </div>
+        </article>
+
+    </div>
+
+</body>
+</html>
